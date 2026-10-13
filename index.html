@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AssistAcad</title>
+<meta name="theme-color" content="#062E1A">
+<meta name="description" content="Votre espace client AssistAcad : commandes, révisions, organisation, CV.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icone-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AssistAcad">
+<style>
+  :root{--forest:#062E1A;--vif:#12B347;--encre:#06210F;--clair:#EAFBF0}
+  html,body{margin:0;height:100%;background:var(--forest);font-family:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff;overflow:hidden}
+  #app{position:fixed;inset:0;padding-top:env(safe-area-inset-top,0px);background:#F2FAF4}
+  #app iframe{width:100%;height:100%;border:0;display:block;background:#F2FAF4}
+  #splash{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(600px 400px at 50% 40%,rgba(18,179,71,.35),transparent 70%),var(--forest);transition:opacity .6s ease}
+  #splash img{width:96px;height:96px;border-radius:24px;box-shadow:0 0 0 4px rgba(18,179,71,.35),0 20px 50px rgba(0,0,0,.4);animation:entre .8s cubic-bezier(.2,.8,.2,1) both}
+  #splash b{font-size:26px;letter-spacing:-.02em;animation:entre .8s .12s cubic-bezier(.2,.8,.2,1) both}
+  #splash span{font-size:14px;color:#B5D9C1;animation:entre .8s .24s cubic-bezier(.2,.8,.2,1) both}
+  #splash i{width:140px;height:4px;border-radius:4px;background:rgba(255,255,255,.15);overflow:hidden;position:relative}
+  #splash i::after{content:"";position:absolute;inset:0;width:40%;background:var(--vif);border-radius:4px;animation:charge 1.1s ease-in-out infinite}
+  @keyframes entre{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes charge{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
+  #bandeau{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:6;display:none;align-items:center;gap:12px;background:var(--forest);color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 18px 40px rgba(0,0,0,.35);font-size:14px;line-height:1.4}
+  #bandeau.vu{display:flex;animation:entre .5s ease both}
+  #bandeau img{width:40px;height:40px;border-radius:10px;flex:none}
+  #bandeau .t{flex:1;min-width:0}
+  #bandeau button{border:0;border-radius:12px;font-weight:800;font-size:14px;font-family:inherit;padding:11px 14px;cursor:pointer;min-height:44px}
+  #installer{background:var(--vif);color:var(--encre)}
+  #plusTard{background:transparent;color:#B5D9C1}
+  #horsLigne{position:fixed;inset:0;z-index:7;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;background:var(--forest)}
+  #horsLigne.vu{display:flex}
+  #horsLigne button{border:0;border-radius:12px;background:var(--vif);color:var(--encre);font-weight:800;font-size:15px;font-family:inherit;padding:13px 20px;min-height:44px;cursor:pointer}
+  @media (prefers-reduced-motion: reduce){#splash *,#bandeau.vu{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="splash" role="status" aria-live="polite"><img src="icone-192.png" alt=""><b>AssistAcad</b><span>Votre réussite, notre priorité</span><i></i></div>
+<div id="bandeau" role="region" aria-label="Installer l’application">
+  <img src="icone-192.png" alt="">
+  <div class="t" id="bandeauTexte"><b>Installer AssistAcad</b><br>Votre espace sur l’écran d’accueil.</div>
+  <button type="button" id="installer">Installer</button>
+  <button type="button" id="plusTard" aria-label="Plus tard">✕</button>
+</div>
+<div id="horsLigne" role="alert"><b style="font-size:22px">Pas de connexion Internet</b><span style="color:#B5D9C1">Vérifiez le Wi-Fi ou les données mobiles, puis réessayez.</span><button type="button" onclick="location.reload()">Réessayer</button></div>
+<script>
+(function () {
+  "use strict";
+  var splash = document.getElementById("splash"), app = document.getElementById("app");
+  var enAppli = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  function finSplash() { splash.style.opacity = "0"; setTimeout(function () { splash.style.display = "none"; }, 650); }
+  function horsLigne() { document.getElementById("horsLigne").classList.add("vu"); finSplash(); }
+  if (!navigator.onLine) { horsLigne(); }
+  fetch("config.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (c) {
+    if (!c || !/^https:\/\/script\.google\.com\/.+\/exec$/.test(String(c.url || ""))) { splash.querySelector("span").textContent = "Configuration incomplète : le lien n’est pas encore renseigné."; return; }
+    var f = document.createElement("iframe");
+    f.title = "AssistAcad"; f.allow = "clipboard-write; fullscreen";
+    f.src = c.url + "?cadre=1&app=1";
+    f.addEventListener("load", function () { setTimeout(finSplash, 400); });
+    app.appendChild(f);
+    setTimeout(finSplash, 9000);
+  }).catch(horsLigne);
+  window.addEventListener("offline", horsLigne);
+
+  // Installation : Android et ordinateur (Chrome, Edge) proposent le bouton ; iPhone : explication
+  var invite = null, bandeau = document.getElementById("bandeau"), refus = false;
+  try { refus = localStorage.getItem("aa_install_non") === "1"; } catch (e) {}
+  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); invite = e; if (!refus && !enAppli) bandeau.classList.add("vu"); });
+  document.getElementById("installer").onclick = function () {
+    if (invite) { invite.prompt(); invite.userChoice.then(function () { bandeau.classList.remove("vu"); invite = null; }); return; }
+    bandeau.classList.remove("vu");
+  };
+  document.getElementById("plusTard").onclick = function () { bandeau.classList.remove("vu"); try { localStorage.setItem("aa_install_non", "1"); } catch (e) {} };
+  var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+  if (ios && !enAppli && !refus) {
+    document.getElementById("bandeauTexte").innerHTML = "<b>Installer AssistAcad</b><br>Touchez <b>Partager</b> ⬆️ puis <b>« Sur l’écran d’accueil »</b>.";
+    document.getElementById("installer").textContent = "Compris";
+    setTimeout(function () { bandeau.classList.add("vu"); }, 2500);
+  }
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+})();
+</script>
+</body>
+</html>

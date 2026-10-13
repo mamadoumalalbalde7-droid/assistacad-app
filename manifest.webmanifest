@@ -1,0 +1,17 @@
+{
+  "name": "AssistAcad",
+  "short_name": "AssistAcad",
+  "description": "Votre espace client AssistAcad : commandes, révisions, organisation, CV.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#062E1A",
+  "theme_color": "#12B347",
+  "icons": [
+    { "src": "icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icone-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icone-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

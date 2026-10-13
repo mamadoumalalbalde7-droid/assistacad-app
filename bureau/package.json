@@ -1,0 +1,25 @@
+{
+  "name": "assistacad-client",
+  "productName": "AssistAcad Client",
+  "version": "1.0.0",
+  "description": "Application AssistAcad pour les clients",
+  "homepage": "https://t.me/assisacad",
+  "author": { "name": "AssistAcad", "email": "admin@assistacad.local" },
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.js",
+  "scripts": { "start": "electron ." },
+  "devDependencies": { "electron": "44.4.5", "electron-builder": "26.16.1" },
+  "build": {
+    "appId": "com.assistacad.client",
+    "productName": "AssistAcad Client",
+    "publish": null,
+    "files": ["main.js", "config.json", "build/icon.png", "package.json"],
+    "directories": { "output": "dist", "buildResources": "build" },
+    "artifactName": "AssistAcad-Client-${version}-${os}-${arch}.${ext}",
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "icon": "build/icon.png" },
+    "nsis": { "oneClick": true, "perMachine": false, "createDesktopShortcut": true, "shortcutName": "AssistAcad", "artifactName": "AssistAcad-Client-Installation-${version}.${ext}" },
+    "mac": { "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }], "category": "public.app-category.education", "icon": "build/icon.png" },
+    "linux": { "target": ["AppImage", "deb"], "category": "Education", "icon": "build/icon.png", "maintainer": "AssistAcad" }
+  }
+}
