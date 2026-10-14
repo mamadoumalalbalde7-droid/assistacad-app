@@ -1,0 +1,37 @@
+# Change TOUTES les icônes de l'application dès que icone/icone.png est remplacé.
+# (téléphone Android/iPhone, onglet du navigateur, logiciel ordinateur, photo du bot)
+name: Mettre à jour les icônes
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["icone/icone.png", "icone/couleur.txt", "icone/generer.py"]
+permissions:
+  contents: write
+  actions: write
+jobs:
+  icones:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - name: Fabriquer toutes les icônes
+        run: python icone/generer.py
+      - name: Enregistrer
+        id: enr
+        run: |
+          git config user.name "AssistAcad (icônes)"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "change=non" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git commit -m "Icônes mises à jour automatiquement ($(cat icone/version.txt))"
+          git push
+          echo "change=oui" >> "$GITHUB_OUTPUT"
+      - name: Reconstruire le logiciel AssistAcad Client avec la nouvelle icône
+        if: steps.enr.outputs.change == 'oui'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run main.yml --ref main

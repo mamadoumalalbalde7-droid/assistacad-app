@@ -1,6 +1,6 @@
 // AssistAcad — l'application s'ouvre même sans réseau (écran « hors connexion »)
-const CACHE = "assistacad-v2";
-const COQUILLE = ["./", "index.html", "manifest.webmanifest", "icone-192.png?v=2", "icone-512.png?v=2", "apple-touch-icon.png?v=2", "favicon.ico"];
+const CACHE = "assistacad-480f4d8b";
+const COQUILLE = ["./", "index.html", "manifest.webmanifest", "icone-192.png?v=480f4d8b", "icone-512.png?v=480f4d8b", "apple-touch-icon.png?v=480f4d8b", "favicon.ico"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(COQUILLE)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((x) => x !== CACHE).map((x) => caches.delete(x)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", (e) => {
