@@ -1,0 +1,30 @@
+ASSISTACAD — MISE À JOUR 34 : nouvelle icône « La Bulle »
+==========================================================
+
+1. SITE (onglet du navigateur) — Apps Script
+   Remplacez EspacePlus2.gs (toujours le DERNIER fichier) › Ctrl+S
+   › Déployer › Gérer les déploiements › ✏️ › Nouvelle version › Déployer.
+   L'icône de l'onglet vient de votre application client sur GitHub Pages
+   (le « Lien de l'application CLIENT » réglé dans Outils › Logiciel AssistAcad).
+   Autre adresse d'image ? Mettez-la dans la propriété FAVICON_URL.
+
+2. APPLICATION CLIENT (Android, iPhone, ordinateur) — dépôt GitHub « assistacad-app »
+   Envoyez le contenu du dossier « app-client-a-mettre-sur-GitHub » dans le dépôt :
+   Add file › Upload files › glissez les fichiers ET le dossier bureau › Commit changes.
+   (Ils remplacent les anciens : icone-192.png, icone-512.png, icone-maskable-512.png,
+    apple-touch-icon.png, sw.js, bureau/build/icon.png.)
+   Les téléphones prennent la nouvelle icône au prochain chargement ; sur iPhone,
+   il faut parfois retirer l'icône de l'écran d'accueil et la rajouter.
+   Installateur PC : Actions › « Construire AssistAcad Client » › Run workflow.
+
+3. LOGICIEL DE L'ÉQUIPE (ordinateur) — son dépôt GitHub
+   Remplacez build/icon.png par celui du dossier « logiciel-equipe-a-mettre-sur-GitHub »,
+   puis Actions › Run workflow, et réinstallez le logiciel.
+
+4. PHOTO DU BOT TELEGRAM
+   Dans Telegram : @BotFather › /setuserpic › choisissez @acades_bot
+   › envoyez l'image icones/photo-bot-640.png.
+
+DOSSIER « icones » : icone.svg (original, pour l'imprimeur ou les réseaux), icone-512.png,
+favicon.ico, icon.ico (Windows), photo-bot-640.png.
+AssistAcad-application-client.zip : l'application client complète, déjà avec la nouvelle icône.
