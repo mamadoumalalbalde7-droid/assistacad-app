@@ -37,6 +37,19 @@
   #horsLigne{position:fixed;inset:0;z-index:7;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;background:var(--forest)}
   #horsLigne.vu{display:flex}
   #horsLigne button{border:0;border-radius:12px;background:var(--vif);color:var(--encre);font-weight:800;font-size:15px;font-family:inherit;padding:13px 20px;min-height:44px;cursor:pointer}
+  #pBtn{position:fixed;left:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:4;width:48px;height:48px;border-radius:50%;border:0;background:var(--forest);box-shadow:0 10px 26px rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;cursor:pointer;padding:0}
+  #pBtn.vu{display:flex}
+  #pBtn svg{width:22px;height:22px}
+  #partage{position:fixed;inset:0;z-index:8;display:none;align-items:flex-end;justify-content:center;background:rgba(3,20,11,.55)}
+  #partage.vu{display:flex}
+  #partage .f{width:100%;max-width:520px;background:#fff;color:var(--encre);border-radius:22px 22px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom,0px));box-sizing:border-box;animation:entre .35s ease both}
+  #partage h2{margin:0 0 4px;font-size:20px}
+  #partage p{margin:0 0 14px;color:#4F6156;font-size:14px;line-height:1.45}
+  #partage .g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  #partage .g button,#partage .g a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border-radius:14px;border:1.5px solid #DCE8DF;background:#fff;color:var(--encre);font:800 15px Manrope,system-ui,sans-serif;text-decoration:none;cursor:pointer}
+  #partage .g .pp{grid-column:1/-1;background:var(--vif);border-color:var(--vif);color:var(--encre)}
+  #partage .lien{margin-top:12px;font-size:13px;color:#4F6156;word-break:break-all;text-align:center}
+  #partage .fermer{display:block;width:100%;margin-top:10px;min-height:46px;border:0;background:transparent;color:#4F6156;font:700 15px Manrope,system-ui,sans-serif;cursor:pointer}
   @media (prefers-reduced-motion: reduce){#splash *,#bandeau.vu{animation:none!important}}
 </style>
 </head>
@@ -50,6 +63,18 @@
   <button type="button" id="plusTard" aria-label="Plus tard">✕</button>
 </div>
 <div id="horsLigne" role="alert"><b style="font-size:22px">Pas de connexion Internet</b><span style="color:#B5D9C1">Vérifiez le Wi-Fi ou les données mobiles, puis réessayez.</span><button type="button" onclick="location.reload()">Réessayer</button></div>
+<button type="button" id="pBtn" aria-label="Partager l’application"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M8.6 10.6 15.4 6.9M8.6 13.4l6.8 3.7"/><circle cx="6" cy="12" r="2.6" fill="#fff"/><circle cx="18" cy="5.5" r="2.6" fill="#fff"/><circle cx="18" cy="18.5" r="2.6" fill="#fff"/></svg></button>
+<div id="partage" role="dialog" aria-modal="true" aria-labelledby="pT"><div class="f">
+  <h2 id="pT"></h2><p id="pS"></p>
+  <div class="g">
+    <button type="button" class="pp" id="pNatif"></button>
+    <a id="pWa" target="_blank" rel="noopener">WhatsApp</a>
+    <a id="pTg" target="_blank" rel="noopener">Telegram</a>
+    <button type="button" id="pCopie" style="grid-column:1/-1"></button>
+  </div>
+  <div class="lien" id="pLien"></div>
+  <button type="button" class="fermer" id="pFermer"></button>
+</div></div>
 <script>
 (function () {
   "use strict";
@@ -83,6 +108,45 @@
     document.getElementById("bandeauTexte").innerHTML = "<b>Installer AssistAcad</b><br>Touchez <b>Partager</b> ⬆️ puis <b>« Sur l’écran d’accueil »</b>.";
     document.getElementById("installer").textContent = "Compris";
     setTimeout(function () { bandeau.classList.add("vu"); }, 2500);
+  }
+
+  // Partager l'application : raccourci « Partager » (appui long sur l'icône, Android)
+  // et bouton rond en bas à gauche dans l'application installée (Android et iPhone)
+  var LG = (navigator.language || "fr").slice(0, 2).toLowerCase();
+  var TX = {
+    fr: ["Partager AssistAcad", "Envoyez l’application à un ami : il l’installe en un geste depuis ce lien.", "Partager…", "Copier le lien", "Lien copié ✓", "Fermer", "AssistAcad — aide académique (mémoires, thèses, présentations). Installe l’application : "],
+    en: ["Share AssistAcad", "Send the app to a friend: they can install it from this link in one tap.", "Share…", "Copy link", "Link copied ✓", "Close", "AssistAcad — academic help (theses, dissertations, presentations). Install the app: "],
+    ru: ["Поделиться AssistAcad", "Отправьте приложение другу: он установит его по этой ссылке.", "Поделиться…", "Скопировать ссылку", "Ссылка скопирована ✓", "Закрыть", "AssistAcad — помощь в учёбе (дипломы, курсовые, презентации). Установите приложение: "],
+    ar: ["مشاركة AssistAcad", "أرسل التطبيق إلى صديق ليثبّته من هذا الرابط.", "مشاركة…", "نسخ الرابط", "تم نسخ الرابط ✓", "إغلاق", "AssistAcad — مساعدة أكاديمية (مذكرات، أطروحات، عروض). ثبّت التطبيق: "]
+  };
+  var tx = TX[LG] || TX.fr, pg = document.getElementById("partage");
+  var LIEN = location.origin + location.pathname.replace(/index\.html$/, "");
+  var MSG = tx[6] + LIEN;
+  if (LG === "ar") pg.setAttribute("dir", "rtl");
+  document.getElementById("pT").textContent = tx[0]; document.getElementById("pS").textContent = tx[1];
+  document.getElementById("pNatif").textContent = tx[2]; document.getElementById("pCopie").textContent = tx[3];
+  document.getElementById("pFermer").textContent = tx[5]; document.getElementById("pLien").textContent = LIEN;
+  document.getElementById("pWa").href = "https://wa.me/?text=" + encodeURIComponent(MSG);
+  document.getElementById("pTg").href = "https://t.me/share/url?url=" + encodeURIComponent(LIEN) + "&text=" + encodeURIComponent(tx[6].replace(/[:：]\s*$/, ""));
+  if (!navigator.share) document.getElementById("pNatif").style.display = "none";
+  function ouvrirPartage() { pg.classList.add("vu"); }
+  function fermerPartage() { pg.classList.remove("vu"); }
+  document.getElementById("pNatif").onclick = function () {
+    navigator.share({ title: "AssistAcad", text: tx[6], url: LIEN }).then(fermerPartage).catch(function () {});
+  };
+  document.getElementById("pCopie").onclick = function () {
+    var b = this, ok = function () { b.textContent = tx[4]; setTimeout(function () { b.textContent = tx[3]; }, 2000); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(LIEN).then(ok, function () { prompt(tx[3], LIEN); });
+    else { var t = document.createElement("textarea"); t.value = LIEN; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); ok(); } catch (e) {} t.remove(); }
+  };
+  document.getElementById("pFermer").onclick = fermerPartage;
+  pg.addEventListener("click", function (e) { if (e.target === pg) fermerPartage(); });
+  document.getElementById("pBtn").onclick = ouvrirPartage;
+  document.getElementById("pBtn").setAttribute("aria-label", tx[0]);
+  if (enAppli) document.getElementById("pBtn").classList.add("vu");
+  if (/[?&]partager=1/.test(location.search)) {
+    try { history.replaceState(null, "", location.pathname); } catch (e) {}
+    setTimeout(function () { finSplash(); ouvrirPartage(); }, 600);
   }
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();

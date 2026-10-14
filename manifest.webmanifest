@@ -10,8 +10,42 @@
   "background_color": "#062E1A",
   "theme_color": "#12B347",
   "icons": [
-    { "src": "icone-192.png?v=480f4d8b", "sizes": "192x192", "type": "image/png" },
-    { "src": "icone-512.png?v=480f4d8b", "sizes": "512x512", "type": "image/png" },
-    { "src": "icone-maskable-512.png?v=480f4d8b", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icone-192.png?v=480f4d8b",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icone-512.png?v=480f4d8b",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icone-maskable-512.png?v=480f4d8b",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "./",
+  "shortcuts": [
+    {
+      "name": "Partager l’application",
+      "short_name": "Partager",
+      "description": "Envoyer AssistAcad à un ami",
+      "url": "./?partager=1",
+      "icons": [
+        {
+          "src": "icone/partager-96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        },
+        {
+          "src": "icone/partager-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
   ]
 }
