@@ -1,7 +1,7 @@
 {
   "name": "assistacad-client",
   "productName": "AssistAcad Client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Application AssistAcad pour les clients",
   "homepage": "https://t.me/assisacad",
   "author": { "name": "AssistAcad", "email": "admin@assistacad.local" },
