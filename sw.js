@@ -13,3 +13,23 @@ self.addEventListener("fetch", (e) => {
 });
 
 self.addEventListener("message", (e) => { if (e.data === "maj") self.skipWaiting(); });
+
+// Notifications : affichage à la réception et ouverture au clic
+self.addEventListener("push", (e) => {
+  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { try { d = { corps: e.data.text() }; } catch (y) {} }
+  const titre = d.titre || "AssistAcad";
+  const opt = {
+    body: d.corps || "", icon: d.icone || "icone-192.png", badge: "icone-192.png",
+    lang: d.langue || "fr", dir: d.langue === "ar" ? "rtl" : "auto",
+    data: { url: d.url || "./" }, tag: d.tag || "assistacad", renotify: true, vibrate: [60, 30, 60]
+  };
+  e.waitUntil(self.registration.showNotification(titre, opt));
+});
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const cible = (e.notification.data && e.notification.data.url) || "./";
+  e.waitUntil(clients.matchAll({ type: "window", includeUncontrolled: true }).then((liste) => {
+    for (const c of liste) { if ("focus" in c) { c.navigate && c.navigate(cible); return c.focus(); } }
+    return clients.openWindow(cible);
+  }));
+});

@@ -39,6 +39,11 @@
   #horsLigne button{border:0;border-radius:12px;background:var(--vif);color:var(--encre);font-weight:800;font-size:15px;font-family:inherit;padding:13px 20px;min-height:44px;cursor:pointer}
   #pBtn{position:fixed;left:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:4;width:48px;height:48px;border-radius:50%;border:0;background:var(--forest);box-shadow:0 10px 26px rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;cursor:pointer;padding:0}
   #pBtn.vu{display:flex}
+  #clBtn{position:fixed;left:12px;bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:4;width:48px;height:48px;border-radius:50%;border:0;background:var(--vif);box-shadow:0 10px 26px rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;cursor:pointer;padding:0}
+  #clBtn.vu{display:flex}
+  #clBtn svg{width:23px;height:23px}
+  #toastP{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:9;background:var(--encre);color:#fff;padding:12px 18px;border-radius:14px;font-size:14px;font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.4);opacity:0;transition:opacity .3s;pointer-events:none;max-width:88%;text-align:center}
+  #toastP.vu{opacity:1}
   #pBtn svg{width:22px;height:22px}
   #partage{position:fixed;inset:0;z-index:8;display:none;align-items:flex-end;justify-content:center;background:rgba(3,20,11,.55)}
   #partage.vu{display:flex}
@@ -98,6 +103,8 @@
 </div>
 <div id="horsLigne" role="alert"><b style="font-size:22px">Pas de connexion Internet</b><span style="color:#B5D9C1">Vérifiez le Wi-Fi ou les données mobiles, puis réessayez.</span><button type="button" onclick="location.reload()">Réessayer</button></div>
 <button type="button" id="pBtn" aria-label="Partager l’application"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M8.6 10.6 15.4 6.9M8.6 13.4l6.8 3.7"/><circle cx="6" cy="12" r="2.6" fill="#fff"/><circle cx="18" cy="5.5" r="2.6" fill="#fff"/><circle cx="18" cy="18.5" r="2.6" fill="#fff"/></svg></button>
+<button type="button" id="clBtn" aria-label="Activer les notifications"><svg viewBox="0 0 24 24" fill="#06210F" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6c0 3.5-1 5-2 6.2-.5.6-.1 1.6.7 1.6h14.6c.8 0 1.2-1 .7-1.6C19 13 18 11.5 18 8a6 6 0 0 0-6-6Z"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0Z"/></svg></button>
+<div id="toastP" role="status" aria-live="polite"></div>
 <div id="partage" role="dialog" aria-modal="true" aria-labelledby="pT"><div class="f">
   <h2 id="pT"></h2><p id="pS"></p>
   <div class="g">
@@ -120,6 +127,7 @@
   if (!navigator.onLine) { horsLigne(); }
   fetch("config.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (c) {
     if (!c || !/^https:\/\/script\.google\.com\/.+\/exec$/.test(String(c.url || ""))) { splash.querySelector("span").textContent = "Configuration incomplète : le lien n’est pas encore renseigné."; return; }
+    window.__CFG = c; try { demarrerPush(c); } catch (e) {}
     var f = document.createElement("iframe");
     f.title = "AssistAcad"; f.allow = "clipboard-write; fullscreen";
     f.src = c.url + "?cadre=1&app=1";
@@ -149,10 +157,10 @@
   // et bouton rond en bas à gauche dans l'application installée (Android et iPhone)
   var LG = (navigator.language || "fr").slice(0, 2).toLowerCase();
   var TX = {
-    fr: ["Partager AssistAcad", "Envoyez l’application à un ami : il l’installe en un geste depuis ce lien.", "Partager…", "Copier le lien", "Lien copié ✓", "Fermer", "AssistAcad — aide académique (mémoires, thèses, présentations). Installe l’application : "],
-    en: ["Share AssistAcad", "Send the app to a friend: they can install it from this link in one tap.", "Share…", "Copy link", "Link copied ✓", "Close", "AssistAcad — academic help (theses, dissertations, presentations). Install the app: "],
-    ru: ["Поделиться AssistAcad", "Отправьте приложение другу: он установит его по этой ссылке.", "Поделиться…", "Скопировать ссылку", "Ссылка скопирована ✓", "Закрыть", "AssistAcad — помощь в учёбе (дипломы, курсовые, презентации). Установите приложение: "],
-    ar: ["مشاركة AssistAcad", "أرسل التطبيق إلى صديق ليثبّته من هذا الرابط.", "مشاركة…", "نسخ الرابط", "تم نسخ الرابط ✓", "إغلاق", "AssistAcad — مساعدة أكاديمية (مذكرات، أطروحات، عروض). ثبّت التطبيق: "]
+    fr: ["Partager AssistAcad", "Envoyez l’application à un ami : il l’installe en un geste depuis ce lien.", "Partager…", "Copier le lien", "Lien copié ✓", "Fermer", "AssistAcad — aide académique (mémoires, thèses, présentations). Installe l’application : ", "Activer les notifications", "Notifications activées ✓", "Notifications refusées — autorisez-les dans les réglages du téléphone."],
+    en: ["Share AssistAcad", "Send the app to a friend: they can install it from this link in one tap.", "Share…", "Copy link", "Link copied ✓", "Close", "AssistAcad — academic help (theses, dissertations, presentations). Install the app: ", "Turn on notifications", "Notifications on ✓", "Notifications blocked — allow them in your phone settings."],
+    ru: ["Поделиться AssistAcad", "Отправьте приложение другу: он установит его по этой ссылке.", "Поделиться…", "Скопировать ссылку", "Ссылка скопирована ✓", "Закрыть", "AssistAcad — помощь в учёбе (дипломы, курсовые, презентации). Установите приложение: ", "Включить уведомления", "Уведомления включены ✓", "Уведомления запрещены — разрешите их в настройках телефона."],
+    ar: ["مشاركة AssistAcad", "أرسل التطبيق إلى صديق ليثبّته من هذا الرابط.", "مشاركة…", "نسخ الرابط", "تم نسخ الرابط ✓", "إغلاق", "AssistAcad — مساعدة أكاديمية (مذكرات، أطروحات، عروض). ثبّت التطبيق: ", "تفعيل الإشعارات", "تم تفعيل الإشعارات ✓", "الإشعارات محظورة — فعّلها من إعدادات الهاتف."]
   };
   var tx = TX[LG] || TX.fr, pg = document.getElementById("partage");
   var LIEN = location.origin + location.pathname.replace(/index\.html$/, "");
@@ -259,6 +267,51 @@
   }
   charger();
   document.addEventListener("visibilitychange", function () { if (!document.hidden) charger(); });
+
+  // ---- Notifications push (bulle sur l'écran, même application fermée) ----
+  function urlB64(b64) {
+    var pad = "=".repeat((4 - b64.length % 4) % 4);
+    var base = (b64 + pad).replace(/-/g, "+").replace(/_/g, "/");
+    var raw = atob(base), u = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) u[i] = raw.charCodeAt(i);
+    return u;
+  }
+  function toastP(msg) {
+    var t = document.getElementById("toastP"); t.textContent = msg; t.classList.add("vu");
+    setTimeout(function () { t.classList.remove("vu"); }, 3200);
+  }
+  function majCloche() {
+    var b = document.getElementById("clBtn"), peut = ("serviceWorker" in navigator) && ("PushManager" in window) && window.__CFG && window.__CFG.push_cle;
+    var ok = (window.Notification && Notification.permission === "granted");
+    if (enAppli && peut && !ok && Notification.permission !== "denied") b.classList.add("vu"); else b.classList.remove("vu");
+  }
+  function pushAbonner(cfg, forcer) {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window) || !cfg || !cfg.push_cle || !window.Notification) return;
+    if (Notification.permission === "denied") { if (forcer) toastP((TX[LG] || TX.fr)[9]); return; }
+    if (!forcer && Notification.permission !== "granted") return;
+    navigator.serviceWorker.ready.then(function (reg) {
+      return reg.pushManager.getSubscription().then(function (sub) {
+        if (sub) return sub;
+        return Notification.requestPermission().then(function (perm) {
+          if (perm !== "granted") throw new Error("refus");
+          return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64(cfg.push_cle) });
+        });
+      });
+    }).then(function (sub) {
+      var lg = (navigator.language || "fr").slice(0, 2);
+      fetch(cfg.url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: JSON.stringify({ push: "abonner", sub: sub.toJSON(), langue: lg }) }).catch(function () {});
+      try { localStorage.setItem("aa_push", "1"); } catch (e) {}
+      majCloche(); if (forcer) toastP((TX[LG] || TX.fr)[8]);
+    }).catch(function () { if (forcer) toastP((TX[LG] || TX.fr)[9]); majCloche(); });
+  }
+  function demarrerPush(cfg) {
+    document.getElementById("clBtn").setAttribute("aria-label", (TX[LG] || TX.fr)[7]);
+    document.getElementById("clBtn").onclick = function () { pushAbonner(cfg, true); };
+    majCloche();
+    if (window.Notification && Notification.permission === "granted") pushAbonner(cfg, false); // réabonne en silence
+  }
+
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();
 </script>
