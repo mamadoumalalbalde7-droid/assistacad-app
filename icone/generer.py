@@ -83,6 +83,7 @@ def main():
         s = open(p, encoding="utf-8").read()
         s2 = re.sub(r"((?:icone-192|icone-512|icone-maskable-512|apple-touch-icon)\.png)(\?v=[\w-]+)?", r"\1?v=" + version, s)
         s2 = re.sub(r'const CACHE = "assistacad-[\w-]+";', 'const CACHE = "assistacad-' + version + '";', s2)
+        s2 = re.sub(r'var MAJ_ACTUELLE = "[\w-]+";', 'var MAJ_ACTUELLE = "' + version + '";', s2)
         if s2 != s:
             open(p, "w", encoding="utf-8").write(s2)
     print("Icônes à jour, version", version, "fond", "#%02X%02X%02X" % fond)

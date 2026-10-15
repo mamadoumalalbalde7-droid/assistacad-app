@@ -50,11 +50,45 @@
   #partage .g .pp{grid-column:1/-1;background:var(--vif);border-color:var(--vif);color:var(--encre)}
   #partage .lien{margin-top:12px;font-size:13px;color:#4F6156;word-break:break-all;text-align:center}
   #partage .fermer{display:block;width:100%;margin-top:10px;min-height:46px;border:0;background:transparent;color:#4F6156;font:700 15px Manrope,system-ui,sans-serif;cursor:pointer}
+  #cloche{position:fixed;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:6;width:46px;height:46px;border-radius:50%;border:0;background:var(--forest);box-shadow:0 10px 26px rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;cursor:pointer;padding:0}
+  #cloche.vu{display:flex}
+  #cloche svg{width:22px;height:22px}
+  #pastille{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;border-radius:10px;background:#E4483B;color:#fff;font:800 12px/20px Manrope,system-ui,sans-serif;text-align:center;padding:0 5px;box-sizing:border-box;display:none}
+  #pastille.vu{display:block}
+  #centre{position:fixed;inset:0;z-index:9;display:none;align-items:flex-start;justify-content:center;background:rgba(3,20,11,.55)}
+  #centre.vu{display:flex}
+  #centre .f{width:100%;max-width:520px;max-height:82vh;overflow:auto;margin-top:calc(8px + env(safe-area-inset-top,0px));background:#fff;color:var(--encre);border-radius:0 0 22px 22px;padding:18px 16px calc(14px + env(safe-area-inset-bottom,0px));box-sizing:border-box;animation:descend .3s ease both}
+  @keyframes descend{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+  #centre h2{margin:0 0 12px;font-size:19px;display:flex;align-items:center;gap:8px}
+  #centre .vide{color:#4F6156;font-size:14px;padding:16px 4px}
+  .notif{border:1.5px solid #E1ECE4;border-radius:14px;padding:12px 14px;margin-bottom:10px}
+  .notif.neuf{border-color:var(--vif);background:#F2FBF5}
+  .notif .h{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .notif .et{font:800 11px Manrope,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:999px}
+  .notif .et.maj{background:var(--vif);color:var(--encre)}
+  .notif .et.nouveaute{background:#E6F0FF;color:#1D4ED8}
+  .notif b{font-size:15px}
+  .notif .d{color:#8A9A90;font-size:12px;margin-left:auto}
+  .notif p{margin:4px 0 0;font-size:14px;line-height:1.5;color:#3B4B41}
+  .notif .maj-btn{margin-top:10px;border:0;border-radius:11px;background:var(--vif);color:var(--encre);font:800 14px Manrope,system-ui,sans-serif;padding:11px 16px;min-height:44px;cursor:pointer}
+  #centre .fermer{display:block;width:100%;margin-top:4px;min-height:46px;border:0;background:transparent;color:#4F6156;font:700 15px Manrope,system-ui,sans-serif;cursor:pointer}
+  #bulle{position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:7;display:none;gap:12px;align-items:flex-start;background:var(--forest);color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 18px 40px rgba(0,0,0,.4)}
+  #bulle.vu{display:flex;animation:descend .4s ease both}
+  #bulle svg{width:26px;height:26px;flex:none;margin-top:2px}
+  #bulle .t{flex:1;min-width:0;font-size:14px;line-height:1.4}
+  #bulle .t b{display:block;margin-bottom:2px}
+  #bulle .actions{display:flex;flex-direction:column;gap:6px}
+  #bulle .pm{border:0;border-radius:11px;background:var(--vif);color:var(--encre);font:800 13px Manrope,system-ui,sans-serif;padding:9px 12px;min-height:40px;cursor:pointer;white-space:nowrap}
+  #bulle .x{border:0;background:transparent;color:#B5D9C1;font-size:18px;cursor:pointer;padding:2px 6px}
   @media (prefers-reduced-motion: reduce){#splash *,#bandeau.vu{animation:none!important}}
 </style>
 </head>
 <body>
 <div id="app"></div>
+<button type="button" id="cloche" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span id="pastille"></span></button>
+<div id="bulle" role="alert"><svg viewBox="0 0 24 24" fill="none" stroke="#12B347" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><div class="t" id="bulleTexte"></div><div class="actions"><button type="button" class="pm" id="bulleBtn"></button><button type="button" class="x" id="bulleX" aria-label="Fermer">✕</button></div></div>
+<div id="centre" role="dialog" aria-modal="true" aria-labelledby="cT"><div class="f"><h2 id="cT"></h2><div id="cListe"></div><button type="button" class="fermer" id="cFermer"></button></div></div>
+
 <div id="splash" role="status" aria-live="polite"><img src="icone-192.png?v=480f4d8b" alt=""><b>AssistAcad</b><span>Votre réussite, notre priorité</span><i></i></div>
 <div id="bandeau" role="region" aria-label="Installer l’application">
   <img src="icone-192.png?v=480f4d8b" alt="">
@@ -78,6 +112,7 @@
 <script>
 (function () {
   "use strict";
+  var MAJ_ACTUELLE = "480f4d8b";  // version installée ; changée à chaque déploiement
   var splash = document.getElementById("splash"), app = document.getElementById("app");
   var enAppli = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   function finSplash() { splash.style.opacity = "0"; setTimeout(function () { splash.style.display = "none"; }, 650); }
@@ -148,6 +183,82 @@
     try { history.replaceState(null, "", location.pathname); } catch (e) {}
     setTimeout(function () { finSplash(); ouvrirPartage(); }, 600);
   }
+
+  // ====== Notifications : nouveautés et mises à jour (fichier nouveautes.json sur GitHub) ======
+  var NT = {
+    fr: { titre: "Notifications", vide: "Aucune notification pour l’instant.", fermer: "Fermer", maj: "Mise à jour", nouv: "Nouveauté", majBtn: "Mettre à jour", plus: "Voir" },
+    en: { titre: "Notifications", vide: "No notifications yet.", fermer: "Close", maj: "Update", nouv: "News", majBtn: "Update", plus: "View" },
+    ru: { titre: "Уведомления", vide: "Пока нет уведомлений.", fermer: "Закрыть", maj: "Обновление", nouv: "Новое", majBtn: "Обновить", plus: "Открыть" },
+    ar: { titre: "الإشعارات", vide: "لا توجد إشعارات بعد.", fermer: "إغلاق", maj: "تحديث", nouv: "جديد", majBtn: "تحديث", plus: "عرض" }
+  };
+  var nt = NT[LG] || NT.fr, cloche = document.getElementById("cloche"), pastille = document.getElementById("pastille"),
+      centre = document.getElementById("centre"), bulle = document.getElementById("bulle");
+  document.getElementById("cT").textContent = nt.titre;
+  document.getElementById("cFermer").textContent = nt.fermer;
+  if (LG === "ar") { centre.setAttribute("dir", "rtl"); bulle.setAttribute("dir", "rtl"); }
+  function luSet() { try { return JSON.parse(localStorage.getItem("aa_notif_lu") || "[]"); } catch (e) { return []; } }
+  function luAdd(ids) { try { var v = luSet(); ids.forEach(function (i) { if (v.indexOf(i) < 0) v.push(i); }); localStorage.setItem("aa_notif_lu", JSON.stringify(v.slice(-80))); } catch (e) {} }
+  function tr(o) { return o ? (o[LG] || o.fr || o.en || "") : ""; }
+  function majMaintenant() {
+    if ("serviceWorker" in navigator && navigator.serviceWorker.getRegistration) {
+      navigator.serviceWorker.getRegistration().then(function (r) { if (r && r.waiting) r.waiting.postMessage("maj"); });
+    }
+    if (window.caches && caches.keys) { caches.keys().then(function (k) { return Promise.all(k.map(function (x) { return caches.delete(x); })); }).then(function () { location.reload(true); }); }
+    else location.reload(true);
+  }
+  var FEED = [];
+  function dessiner() {
+    var lu = luSet(), liste = document.getElementById("cListe"); liste.innerHTML = "";
+    if (!FEED.length) { liste.innerHTML = '<div class="vide">' + nt.vide + '</div>'; return; }
+    FEED.forEach(function (it) {
+      var neuf = lu.indexOf(it.id) < 0, maj = it.type === "maj";
+      var d = document.createElement("div"); d.className = "notif" + (neuf ? " neuf" : "");
+      var et = '<span class="et ' + (maj ? "maj" : "nouveaute") + '">' + (maj ? nt.maj : nt.nouv) + '</span>';
+      d.innerHTML = '<div class="h">' + et + '<b>' + esc(tr(it.titre)) + '</b><span class="d">' + esc(it.date || "") + '</span></div><p>' + esc(tr(it.texte)) + '</p>';
+      if (maj) { var b = document.createElement("button"); b.className = "maj-btn"; b.textContent = nt.majBtn; b.onclick = majMaintenant; d.appendChild(b); }
+      else if (it.lien) { var a = document.createElement("a"); a.href = it.lien; a.target = "_blank"; a.rel = "noopener"; a.className = "maj-btn"; a.style.display = "inline-block"; a.style.textDecoration = "none"; a.textContent = nt.plus; d.appendChild(a); }
+      liste.appendChild(d);
+    });
+  }
+  function esc(x) { return String(x == null ? "" : x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function badge() {
+    var lu = luSet(), n = FEED.filter(function (it) { return lu.indexOf(it.id) < 0; }).length;
+    if (n > 0) { pastille.textContent = n > 9 ? "9+" : String(n); pastille.classList.add("vu"); } else pastille.classList.remove("vu");
+    return n;
+  }
+  function montrerBulle() {
+    var lu = luSet(), neuf = FEED.filter(function (it) { return lu.indexOf(it.id) < 0; })[0];
+    if (!neuf) return;
+    var maj = neuf.type === "maj";
+    document.getElementById("bulleTexte").innerHTML = "<b>" + esc(tr(neuf.titre)) + "</b>" + esc(tr(neuf.texte));
+    var b = document.getElementById("bulleBtn");
+    b.textContent = maj ? nt.majBtn : nt.plus;
+    b.onclick = function () { bulle.classList.remove("vu"); if (maj) majMaintenant(); else ouvrirCentre(); };
+    bulle.classList.add("vu");
+    setTimeout(function () { bulle.classList.remove("vu"); }, 9000);
+    // Notification du téléphone (si l'application est ouverte et l'autorisation donnée)
+    try { if (window.Notification && Notification.permission === "granted") new Notification(tr(neuf.titre), { body: tr(neuf.texte), icon: "icone-192.png?v=480f4d8b", tag: neuf.id }); } catch (e) {}
+  }
+  function ouvrirCentre() { dessiner(); centre.classList.add("vu"); luAdd(FEED.map(function (it) { return it.id; })); badge(); }
+  cloche.onclick = ouvrirCentre;
+  document.getElementById("cFermer").onclick = function () { centre.classList.remove("vu"); };
+  centre.addEventListener("click", function (e) { if (e.target === centre) centre.classList.remove("vu"); });
+  document.getElementById("bulleX").onclick = function () { bulle.classList.remove("vu"); };
+  function charger() {
+    fetch("nouveautes.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
+      // une mise à jour ne s'affiche que si elle vise une version différente de celle déjà installée
+      FEED = (j && j.items || []).filter(function (it) {
+        if (!it || !it.id) return false;
+        if (it.type === "maj") return String(it.cible || "") !== MAJ_ACTUELLE;
+        return true;
+      });
+      if (enAppli) cloche.classList.add("vu");
+      var n = badge();
+      if (n > 0) { if (window.Notification && Notification.permission === "default" && enAppli) setTimeout(function () { try { Notification.requestPermission(); } catch (e) {} }, 4000); setTimeout(montrerBulle, 1800); }
+    }).catch(function () {});
+  }
+  charger();
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) charger(); });
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();
 </script>

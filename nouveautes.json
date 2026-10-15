@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "items": [
+    {
+      "id": "2026-10-15-partage",
+      "type": "nouveaute",
+      "date": "2026-10-15",
+      "titre": { "fr": "Partagez l’application", "en": "Share the app", "ru": "Поделитесь приложением", "ar": "شارك التطبيق" },
+      "texte": {
+        "fr": "Un nouveau bouton « Partager » vous permet d’envoyer AssistAcad à vos amis en un geste.",
+        "en": "A new “Share” button lets you send AssistAcad to your friends in one tap.",
+        "ru": "Новая кнопка «Поделиться» — отправьте AssistAcad друзьям в один клик.",
+        "ar": "زر «مشاركة» جديد يتيح لك إرسال AssistAcad لأصدقائك بضغطة واحدة."
+      }
+    },
+    {
+      "id": "maj-480f4d8b",
+      "type": "maj",
+      "date": "2026-10-15",
+      "cible": "480f4d8b",
+      "titre": { "fr": "Mise à jour disponible", "en": "Update available", "ru": "Доступно обновление", "ar": "تحديث متاح" },
+      "texte": {
+        "fr": "Une nouvelle version de l’application est prête. Touchez « Mettre à jour » pour l’installer.",
+        "en": "A new version of the app is ready. Tap “Update” to install it.",
+        "ru": "Готова новая версия приложения. Нажмите «Обновить», чтобы установить.",
+        "ar": "نسخة جديدة من التطبيق جاهزة. اضغط «تحديث» لتثبيتها."
+      }
+    }
+  ]
+}
