@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AssistAcad</title>
 <meta name="theme-color" content="#062E1A">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me https://t.me; frame-src https://script.google.com https://script.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Votre espace client AssistAcad : commandes, révisions, organisation, CV.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -139,13 +141,13 @@
 
   // Installation : Android et ordinateur (Chrome, Edge) proposent le bouton ; iPhone : explication
   var invite = null, bandeau = document.getElementById("bandeau"), refus = false;
-  try { refus = localStorage.getItem("aa_install_non") === "1"; } catch (e) {}
+  try { var _r = Number(localStorage.getItem("aa_install_non") || 0); refus = _r && (Date.now() - _r) < 2592000000; } catch (e) {}
   window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); invite = e; if (!refus && !enAppli) bandeau.classList.add("vu"); });
   document.getElementById("installer").onclick = function () {
     if (invite) { invite.prompt(); invite.userChoice.then(function () { bandeau.classList.remove("vu"); invite = null; }); return; }
     bandeau.classList.remove("vu");
   };
-  document.getElementById("plusTard").onclick = function () { bandeau.classList.remove("vu"); try { localStorage.setItem("aa_install_non", "1"); } catch (e) {} };
+  document.getElementById("plusTard").onclick = function () { bandeau.classList.remove("vu"); try { localStorage.setItem("aa_install_non", String(Date.now())); } catch (e) {} };
   var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
   if (ios && !enAppli && !refus) {
     document.getElementById("bandeauTexte").innerHTML = "<b>Installer AssistAcad</b><br>Touchez <b>Partager</b> ⬆️ puis <b>« Sur l’écran d’accueil »</b>.";
