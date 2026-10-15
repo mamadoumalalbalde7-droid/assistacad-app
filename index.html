@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AssistAcad</title>
 <meta name="theme-color" content="#062E1A">
+<link rel="preconnect" href="https://script.google.com" crossorigin>
+<link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+<link rel="dns-prefetch" href="https://script.googleusercontent.com">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me https://t.me; frame-src https://script.google.com https://script.googleusercontent.com https://*.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="Votre espace client AssistAcad : commandes, révisions, organisation, CV.">
@@ -87,6 +90,21 @@
   #bulle .actions{display:flex;flex-direction:column;gap:6px}
   #bulle .pm{border:0;border-radius:11px;background:var(--vif);color:var(--encre);font:800 13px Manrope,system-ui,sans-serif;padding:9px 12px;min-height:40px;cursor:pointer;white-space:nowrap}
   #bulle .x{border:0;background:transparent;color:#B5D9C1;font-size:18px;cursor:pointer;padding:2px 6px}
+  #instBtn{position:fixed;left:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:4;height:48px;padding:0 16px;border-radius:24px;border:0;background:var(--vif);color:var(--encre);box-shadow:0 10px 26px rgba(0,0,0,.3);display:none;align-items:center;gap:8px;cursor:pointer;font:800 14px Manrope,system-ui,sans-serif}
+  #instBtn.vu{display:inline-flex}
+  #instBtn svg{width:20px;height:20px}
+  #inst{position:fixed;inset:0;z-index:8;display:none;align-items:flex-end;justify-content:center;background:rgba(3,20,11,.55)}
+  #inst.vu{display:flex}
+  #inst .f{width:100%;max-width:520px;background:#fff;color:var(--encre);border-radius:22px 22px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom,0px));box-sizing:border-box;animation:entre .35s ease both;max-height:86vh;overflow:auto}
+  #inst h2{margin:0 0 4px;font-size:20px;display:flex;align-items:center;gap:8px}
+  #inst h2 img{width:34px;height:34px;border-radius:9px}
+  #inst>.f>p{margin:0 0 14px;color:#4F6156;font-size:14px;line-height:1.45}
+  #inst .grand{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;border:0;border-radius:14px;background:var(--vif);color:var(--encre);font:800 16px Manrope,system-ui,sans-serif;cursor:pointer;margin-bottom:14px}
+  #inst .grand svg{width:21px;height:21px}
+  #inst ol{margin:0;padding-left:22px;color:var(--encre);font-size:14.5px;line-height:1.65}
+  #inst ol b{color:var(--forest)}
+  #inst .note{margin-top:12px;font-size:13px;color:#4F6156;line-height:1.45;background:#F2FBF5;border-radius:12px;padding:10px 12px}
+  #inst .fermer{display:block;width:100%;margin-top:12px;min-height:46px;border:0;background:transparent;color:#4F6156;font:700 15px Manrope,system-ui,sans-serif;cursor:pointer}
   @media (prefers-reduced-motion: reduce){#splash *,#bandeau.vu{animation:none!important}}
 </style>
 </head>
@@ -107,6 +125,15 @@
 <button type="button" id="pBtn" aria-label="Partager l’application"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M8.6 10.6 15.4 6.9M8.6 13.4l6.8 3.7"/><circle cx="6" cy="12" r="2.6" fill="#fff"/><circle cx="18" cy="5.5" r="2.6" fill="#fff"/><circle cx="18" cy="18.5" r="2.6" fill="#fff"/></svg></button>
 <button type="button" id="clBtn" aria-label="Activer les notifications"><svg viewBox="0 0 24 24" fill="#06210F" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6c0 3.5-1 5-2 6.2-.5.6-.1 1.6.7 1.6h14.6c.8 0 1.2-1 .7-1.6C19 13 18 11.5 18 8a6 6 0 0 0-6-6Z"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0Z"/></svg></button>
 <div id="toastP" role="status" aria-live="polite"></div>
+<button type="button" id="instBtn"><svg viewBox="0 0 24 24" fill="none" stroke="#06210F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg><span id="instBtnT">Installer</span></button>
+<div id="inst" role="dialog" aria-modal="true" aria-labelledby="iT"><div class="f">
+  <h2 id="iT"><img src="icone-192.png?v=480f4d8b" alt="">AssistAcad</h2>
+  <p id="iP"></p>
+  <button type="button" class="grand" id="iGo"><svg viewBox="0 0 24 24" fill="none" stroke="#06210F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 21h14"/></svg><span id="iGoT"></span></button>
+  <ol id="iSteps"></ol>
+  <div class="note" id="iNote"></div>
+  <button type="button" class="fermer" id="iFermer"></button>
+</div></div>
 <div id="partage" role="dialog" aria-modal="true" aria-labelledby="pT"><div class="f">
   <h2 id="pT"></h2><p id="pS"></p>
   <div class="g">
@@ -139,20 +166,96 @@
   }).catch(horsLigne);
   window.addEventListener("offline", horsLigne);
 
-  // Installation : Android et ordinateur (Chrome, Edge) proposent le bouton ; iPhone : explication
+  // ===== Installation : fiable sur TOUS les téléphones =====
+  // On ne dépend plus seulement de la proposition automatique d'Android (capricieuse) :
+  // un bouton « Installer » reste toujours disponible, avec les étapes du bon navigateur.
   var invite = null, bandeau = document.getElementById("bandeau"), refus = false;
-  try { var _r = Number(localStorage.getItem("aa_install_non") || 0); refus = _r && (Date.now() - _r) < 2592000000; } catch (e) {}
-  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); invite = e; if (!refus && !enAppli) bandeau.classList.add("vu"); });
-  document.getElementById("installer").onclick = function () {
-    if (invite) { invite.prompt(); invite.userChoice.then(function () { bandeau.classList.remove("vu"); invite = null; }); return; }
-    bandeau.classList.remove("vu");
+  try { var _r = Number(localStorage.getItem("aa_install_non") || 0); refus = _r && (Date.now() - _r) < 432000000; } catch (e) {} // snooze 5 jours seulement
+  var LGi = (navigator.language || "fr").slice(0, 2).toLowerCase();
+  var ua = navigator.userAgent || "";
+  var estIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(ua));
+  var estBureau = !/Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+  function plateforme() {
+    if (estIOS) return "ios";
+    if (/SamsungBrowser/i.test(ua)) return "samsung";
+    if (/FxiOS|Firefox/i.test(ua)) return "firefox";
+    if (estBureau) return "bureau";
+    return "chrome";
+  }
+  var INS = {
+    fr: { titre: "Installer AssistAcad", p: "Ajoutez l’application à votre écran d’accueil : ouverture en un geste, et même sans connexion.", go: "Installer maintenant", btn: "Installer", installer: "Installer", close: "Fermer",
+      iosCourt: "Touchez Partager ⬆️ puis « Sur l’écran d’accueil ».", aide: "Astuce : si le bouton vert ne propose rien, suivez simplement les étapes ci-dessus — c’est normal selon le téléphone.",
+      ios: ["Touchez le bouton <b>Partager</b> ⬆️ en bas de Safari.", "Faites défiler puis touchez <b>« Sur l’écran d’accueil »</b>.", "Touchez <b>Ajouter</b> en haut à droite."],
+      chrome: ["Touchez le menu <b>⋮</b> en haut à droite.", "Touchez <b>« Installer l’application »</b> (ou « Ajouter à l’écran d’accueil »).", "Confirmez avec <b>Installer</b>."],
+      samsung: ["Touchez le menu <b>☰</b> en bas de l’écran.", "Touchez <b>« Ajouter la page à »</b>.", "Choisissez <b>« Écran d’accueil »</b>."],
+      firefox: ["Touchez le menu <b>⋮</b>.", "Touchez <b>« Installer »</b> (ou « Ajouter à l’écran d’accueil »)."],
+      bureau: ["Cliquez sur l’icône d’installation <b>⊕</b> dans la barre d’adresse.", "Ou menu <b>⋮</b> → <b>« Installer AssistAcad »</b>."] },
+    en: { titre: "Install AssistAcad", p: "Add the app to your home screen: opens in one tap, even offline.", go: "Install now", btn: "Install", installer: "Install", close: "Close",
+      iosCourt: "Tap Share ⬆️ then “Add to Home Screen”.", aide: "Tip: if the green button does nothing, just follow the steps above — that’s normal on some phones.",
+      ios: ["Tap the <b>Share</b> ⬆️ button at the bottom of Safari.", "Scroll and tap <b>“Add to Home Screen”</b>.", "Tap <b>Add</b> at the top right."],
+      chrome: ["Tap the <b>⋮</b> menu at the top right.", "Tap <b>“Install app”</b> (or “Add to Home screen”).", "Confirm with <b>Install</b>."],
+      samsung: ["Tap the <b>☰</b> menu at the bottom.", "Tap <b>“Add page to”</b>.", "Choose <b>“Home screen”</b>."],
+      firefox: ["Tap the <b>⋮</b> menu.", "Tap <b>“Install”</b> (or “Add to Home screen”)."],
+      bureau: ["Click the install icon <b>⊕</b> in the address bar.", "Or menu <b>⋮</b> → <b>“Install AssistAcad”</b>."] },
+    ru: { titre: "Установить AssistAcad", p: "Добавьте приложение на главный экран: открывается в одно касание, даже без сети.", go: "Установить", btn: "Установить", installer: "Установить", close: "Закрыть",
+      iosCourt: "Нажмите Поделиться ⬆️, затем «На экран Домой».", aide: "Совет: если зелёная кнопка ничего не предлагает, просто выполните шаги выше — на некоторых телефонах это нормально.",
+      ios: ["Нажмите кнопку <b>Поделиться</b> ⬆️ внизу Safari.", "Прокрутите и нажмите <b>«На экран Домой»</b>.", "Нажмите <b>Добавить</b> вверху справа."],
+      chrome: ["Нажмите меню <b>⋮</b> вверху справа.", "Нажмите <b>«Установить приложение»</b> (или «Добавить на главный экран»).", "Подтвердите <b>Установить</b>."],
+      samsung: ["Нажмите меню <b>☰</b> внизу.", "Нажмите <b>«Добавить страницу на»</b>.", "Выберите <b>«Главный экран»</b>."],
+      firefox: ["Нажмите меню <b>⋮</b>.", "Нажмите <b>«Установить»</b> (или «Добавить на главный экран»)."],
+      bureau: ["Нажмите значок установки <b>⊕</b> в адресной строке.", "Или меню <b>⋮</b> → <b>«Установить AssistAcad»</b>."] },
+    ar: { titre: "تثبيت AssistAcad", p: "أضف التطبيق إلى الشاشة الرئيسية: يفتح بلمسة واحدة، حتى بدون إنترنت.", go: "ثبّت الآن", btn: "تثبيت", installer: "تثبيت", close: "إغلاق",
+      iosCourt: "اضغط مشاركة ⬆️ ثم «إضافة إلى الشاشة الرئيسية».", aide: "ملاحظة: إذا لم يفعل الزر الأخضر شيئًا، فاتبع الخطوات أعلاه — هذا طبيعي على بعض الهواتف.",
+      ios: ["اضغط زر <b>مشاركة</b> ⬆️ أسفل Safari.", "مرّر واضغط <b>«إضافة إلى الشاشة الرئيسية»</b>.", "اضغط <b>إضافة</b> في الأعلى."],
+      chrome: ["اضغط قائمة <b>⋮</b> في الأعلى.", "اضغط <b>«تثبيت التطبيق»</b> (أو «إضافة إلى الشاشة الرئيسية»).", "أكّد بـ <b>تثبيت</b>."],
+      samsung: ["اضغط قائمة <b>☰</b> في الأسفل.", "اضغط <b>«إضافة الصفحة إلى»</b>.", "اختر <b>«الشاشة الرئيسية»</b>."],
+      firefox: ["اضغط قائمة <b>⋮</b>.", "اضغط <b>«تثبيت»</b> (أو «إضافة إلى الشاشة الرئيسية»)."],
+      bureau: ["اضغط أيقونة التثبيت <b>⊕</b> في شريط العنوان.", "أو القائمة <b>⋮</b> ← <b>«تثبيت AssistAcad»</b>."] }
   };
-  document.getElementById("plusTard").onclick = function () { bandeau.classList.remove("vu"); try { localStorage.setItem("aa_install_non", String(Date.now())); } catch (e) {} };
-  var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
-  if (ios && !enAppli && !refus) {
-    document.getElementById("bandeauTexte").innerHTML = "<b>Installer AssistAcad</b><br>Touchez <b>Partager</b> ⬆️ puis <b>« Sur l’écran d’accueil »</b>.";
-    document.getElementById("installer").textContent = "Compris";
-    setTimeout(function () { bandeau.classList.add("vu"); }, 2500);
+  var insT = INS[LGi] || INS.fr, inst = document.getElementById("inst");
+  if (LGi === "ar") inst.setAttribute("dir", "rtl");
+  function construireInst() {
+    document.getElementById("iP").textContent = insT.p;
+    document.getElementById("iGoT").textContent = insT.go;
+    document.getElementById("iFermer").textContent = insT.close;
+    document.getElementById("instBtnT").textContent = insT.btn;
+    var steps = insT[plateforme()] || insT.chrome;
+    document.getElementById("iSteps").innerHTML = steps.map(function (s) { return "<li>" + s + "</li>"; }).join("");
+    document.getElementById("iNote").textContent = insT.aide;
+    document.getElementById("iGo").style.display = invite ? "flex" : "none";
+  }
+  function ouvrirInst() { construireInst(); inst.classList.add("vu"); }
+  function fermerInst() { inst.classList.remove("vu"); }
+  var instBtn = document.getElementById("instBtn");
+  document.getElementById("iFermer").onclick = fermerInst;
+  inst.addEventListener("click", function (e) { if (e.target === inst) fermerInst(); });
+  document.getElementById("iGo").onclick = function () {
+    if (invite) { invite.prompt(); invite.userChoice.then(function (c) { invite = null; fermerInst(); if (c && c.outcome === "accepted") majInstBtn(); }); }
+    else fermerInst();
+  };
+  instBtn.onclick = ouvrirInst;
+  instBtn.querySelector("#instBtnT").textContent = insT.btn;
+  function majInstBtn() {
+    var dedans = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    if (dedans) { instBtn.classList.remove("vu"); bandeau.classList.remove("vu"); } else { instBtn.classList.add("vu"); }
+  }
+  function montrerBanniere() { instBtn.classList.remove("vu"); bandeau.classList.add("vu"); } // bannière et bouton partagent le coin : jamais les deux
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault(); invite = e;
+    if (!refus && !enAppli) { document.getElementById("installer").textContent = insT.installer; montrerBanniere(); } else majInstBtn();
+  });
+  document.getElementById("installer").onclick = function () {
+    bandeau.classList.remove("vu");
+    if (invite) { invite.prompt(); invite.userChoice.then(function (c) { invite = null; majInstBtn(); }); }
+    else { majInstBtn(); ouvrirInst(); }
+  };
+  document.getElementById("plusTard").onclick = function () { bandeau.classList.remove("vu"); majInstBtn(); try { localStorage.setItem("aa_install_non", String(Date.now())); } catch (e) {} };
+  window.addEventListener("appinstalled", function () { try { localStorage.setItem("aa_install_non", String(Date.now())); } catch (e) {} invite = null; instBtn.classList.remove("vu"); bandeau.classList.remove("vu"); fermerInst(); });
+  if (!enAppli) majInstBtn();
+  if (estIOS && !enAppli && !refus) {
+    document.getElementById("bandeauTexte").innerHTML = "<b>" + insT.titre + "</b><br>" + insT.iosCourt;
+    document.getElementById("installer").textContent = insT.installer;
+    setTimeout(montrerBanniere, 2500);
   }
 
   // Partager l'application : raccourci « Partager » (appui long sur l'icône, Android)
