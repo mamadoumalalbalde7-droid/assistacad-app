@@ -105,6 +105,33 @@
   #inst ol b{color:var(--forest)}
   #inst .note{margin-top:12px;font-size:13px;color:#4F6156;line-height:1.45;background:#F2FBF5;border-radius:12px;padding:10px 12px}
   #inst .fermer{display:block;width:100%;margin-top:12px;min-height:46px;border:0;background:transparent;color:#4F6156;font:700 15px Manrope,system-ui,sans-serif;cursor:pointer}
+  #regBtn{position:fixed;left:12px;bottom:calc(130px + env(safe-area-inset-bottom,0px));z-index:4;width:48px;height:48px;border-radius:50%;border:0;background:#0B3D24;box-shadow:0 10px 26px rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;cursor:pointer;padding:0}
+  #regBtn.vu{display:flex}
+  #regBtn svg{width:22px;height:22px}
+  #reglages{position:fixed;inset:0;z-index:8;display:none;align-items:flex-end;justify-content:center;background:rgba(3,20,11,.55)}
+  #reglages.vu{display:flex}
+  #reglages .f{width:100%;max-width:520px;background:#fff;color:var(--encre);border-radius:22px 22px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom,0px));box-sizing:border-box;animation:entre .35s ease both;max-height:86vh;overflow:auto}
+  #reglages h2{margin:0 0 12px;font-size:20px}
+  #reglages .row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #EEF3EE}
+  #reglages .row.top{border-top:0}
+  #reglages .row .t{flex:1;min-width:0}
+  #reglages .row .t b{font-size:15px}
+  #reglages .row .t span{display:block;font-size:13px;color:#4F6156;margin-top:2px}
+  #reglages .sw{width:52px;height:30px;border-radius:999px;border:0;background:#CFD9D1;position:relative;cursor:pointer;flex:none}
+  #reglages .sw.on{background:var(--vif)}
+  #reglages .sw.off-dis{opacity:.4;cursor:not-allowed}
+  #reglages .sw i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .18s}
+  #reglages .sw.on i{left:25px}
+  #reglages .dang{width:100%;min-height:48px;border:1.5px solid #E4483B;border-radius:14px;background:#fff;color:#B3261E;font:800 15px Manrope,system-ui,sans-serif;cursor:pointer}
+  #reglages .note{margin-top:12px;font-size:13px;color:#4F6156;line-height:1.5;background:#F4F7F1;border-radius:12px;padding:10px 12px}
+  #reglages .fermer{display:block;width:100%;margin-top:12px;min-height:46px;border:0;background:transparent;color:#4F6156;font:700 15px Manrope,system-ui,sans-serif;cursor:pointer}
+  #verrou{position:fixed;inset:0;z-index:12;display:none;align-items:center;justify-content:center;background:var(--forest);padding:24px}
+  #verrou.vu{display:flex}
+  #verrou .box{text-align:center;max-width:360px}
+  #verrou svg{width:64px;height:64px;margin-bottom:12px}
+  #verrou h2{margin:0 0 6px;font-size:22px;color:#fff}
+  #verrou p{margin:0 0 18px;color:#B5D9C1;font-size:14px;line-height:1.4}
+  #verrou button{border:0;border-radius:14px;background:var(--vif);color:var(--encre);font:800 16px Manrope,system-ui,sans-serif;padding:14px 26px;min-height:50px;cursor:pointer}
   @media (prefers-reduced-motion: reduce){#splash *,#bandeau.vu{animation:none!important}}
 </style>
 </head>
@@ -134,6 +161,19 @@
   <div class="note" id="iNote"></div>
   <button type="button" class="fermer" id="iFermer"></button>
 </div></div>
+<button type="button" id="regBtn" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="#EAFBF0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+<div id="reglages" role="dialog" aria-modal="true" aria-labelledby="rgT"><div class="f">
+  <h2 id="rgT">Réglages</h2>
+  <div class="row top"><div class="t"><b id="rgBioT">Verrouiller par Face ID / empreinte</b><span id="rgBioS">Demander la biométrie à l’ouverture.</span></div><button type="button" class="sw" id="rgBio" role="switch" aria-label="Verrouillage biométrique"><i></i></button></div>
+  <div class="row"><button type="button" class="dang" id="rgWipe">Déconnecter et effacer mes données</button></div>
+  <div class="note" id="rgNote"></div>
+  <button type="button" class="fermer" id="rgFermer">Fermer</button>
+</div></div>
+<div id="verrou" role="dialog" aria-modal="true" aria-labelledby="vrT"><div class="box">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#12B347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+  <h2 id="vrT">AssistAcad verrouillé</h2><p id="vrP">Déverrouille avec Face ID ou ton empreinte.</p>
+  <button type="button" id="vrGo">Déverrouiller</button>
+</div></div>
 <div id="partage" role="dialog" aria-modal="true" aria-labelledby="pT"><div class="f">
   <h2 id="pT"></h2><p id="pS"></p>
   <div class="g">
@@ -157,12 +197,16 @@
   fetch("config.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (c) {
     if (!c || !/^https:\/\/script\.google\.com\/.+\/exec$/.test(String(c.url || ""))) { splash.querySelector("span").textContent = "Configuration incomplète : le lien n’est pas encore renseigné."; return; }
     window.__CFG = c; try { demarrerPush(c); } catch (e) {}
-    var f = document.createElement("iframe");
-    f.title = "AssistAcad"; f.allow = "clipboard-write; fullscreen";
-    f.src = c.url + "?cadre=1&app=1";
-    f.addEventListener("load", function () { setTimeout(finSplash, 400); });
-    app.appendChild(f);
-    setTimeout(finSplash, 9000);
+    function demarrerApp() {
+      var f = document.createElement("iframe");
+      f.title = "AssistAcad"; f.allow = "clipboard-write; fullscreen";
+      f.src = c.url + "?cadre=1&app=1";
+      f.addEventListener("load", function () { setTimeout(finSplash, 400); });
+      app.appendChild(f);
+      setTimeout(finSplash, 9000);
+    }
+    if (typeof bioActif === "function" && bioActif()) verrouiller(demarrerApp);   // Face ID / empreinte avant d'ouvrir
+    else demarrerApp();
   }).catch(horsLigne);
   window.addEventListener("offline", horsLigne);
 
@@ -357,6 +401,15 @@
   document.getElementById("cFermer").onclick = function () { centre.classList.remove("vu"); };
   centre.addEventListener("click", function (e) { if (e.target === centre) centre.classList.remove("vu"); });
   document.getElementById("bulleX").onclick = function () { bulle.classList.remove("vu"); };
+  // Notification AUTOMATIQUE de nouvelle version : le champ « app » de nouveautes.json
+  // est comparé à ce que l'appareil a déjà vu ; dès qu'il change, chacun est prévenu une fois.
+  function majAuto(v) {
+    document.getElementById("bulleTexte").innerHTML = "<b>" + esc(nt.maj) + "</b>" + esc((typeof rgv !== "undefined" ? rgv : RGV.fr).majDispo);
+    var b = document.getElementById("bulleBtn"); b.textContent = nt.majBtn;
+    b.onclick = function () { bulle.classList.remove("vu"); try { localStorage.setItem("aa_maj_vue", v); } catch (e) {} majMaintenant(); };
+    document.getElementById("bulleX").onclick = function () { bulle.classList.remove("vu"); try { localStorage.setItem("aa_maj_vue", v); } catch (e) {} };
+    bulle.classList.add("vu");
+  }
   function charger() {
     fetch("nouveautes.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
       // une mise à jour ne s'affiche que si elle vise une version différente de celle déjà installée
@@ -367,7 +420,14 @@
       });
       if (enAppli) cloche.classList.add("vu");
       var n = badge();
-      if (n > 0) { if (window.Notification && Notification.permission === "default" && enAppli) setTimeout(function () { try { Notification.requestPermission(); } catch (e) {} }, 4000); setTimeout(montrerBulle, 1800); }
+      // nouvelle version disponible ? (champ « app ») — prioritaire sur la bulle d'actualités
+      var majV = "";
+      try {
+        var vDispo = (j && j.app != null) ? String(j.app) : "", vu = localStorage.getItem("aa_maj_vue") || "";
+        if (vDispo) { if (!vu) localStorage.setItem("aa_maj_vue", vDispo); else if (vu !== vDispo) majV = vDispo; }
+      } catch (e) {}
+      if (majV) { setTimeout(function () { majAuto(majV); }, 1500); }
+      else if (n > 0) { if (window.Notification && Notification.permission === "default" && enAppli) setTimeout(function () { try { Notification.requestPermission(); } catch (e) {} }, 4000); setTimeout(montrerBulle, 1800); }
     }).catch(function () {});
   }
   charger();
@@ -416,6 +476,79 @@
     majCloche();
     if (window.Notification && Notification.permission === "granted") pushAbonner(cfg, false); // réabonne en silence
   }
+
+  // ====== Sécurité : verrouillage Face ID / empreinte + effacer mes données ======
+  var RGV = {
+    fr: { reg: "Réglages", bioT: "Verrouiller par Face ID / empreinte", bioS: "Demander la biométrie à l’ouverture.", wipe: "Déconnecter et effacer mes données", note: "Pour retirer complètement l’application : appui long sur l’icône AssistAcad → « Supprimer » / « Désinstaller ». Pour vous déconnecter de votre compte, utilisez « Se déconnecter » dans votre espace.", fermer: "Fermer", vrT: "AssistAcad verrouillé", vrP: "Déverrouillez avec Face ID ou votre empreinte.", vrGo: "Déverrouiller", indispo: "La biométrie n’est pas disponible sur cet appareil.", echec: "Vérification échouée. Réessayez.", confirmWipe: "Appuyez encore pour confirmer", majDispo: "Nouvelle version disponible — mettez à jour." },
+    en: { reg: "Settings", bioT: "Lock with Face ID / fingerprint", bioS: "Ask for biometrics on open.", wipe: "Sign out and erase my data", note: "To fully remove the app: long-press the AssistAcad icon → “Remove” / “Uninstall”. To sign out of your account, use “Sign out” inside your space.", fermer: "Close", vrT: "AssistAcad locked", vrP: "Unlock with Face ID or your fingerprint.", vrGo: "Unlock", indispo: "Biometrics aren’t available on this device.", echec: "Verification failed. Try again.", confirmWipe: "Tap again to confirm", majDispo: "New version available — please update." },
+    ru: { reg: "Настройки", bioT: "Блокировка Face ID / отпечатком", bioS: "Запрашивать биометрию при открытии.", wipe: "Выйти и стереть мои данные", note: "Чтобы полностью удалить приложение: удерживайте значок AssistAcad → «Удалить». Чтобы выйти из аккаунта, используйте «Выйти» в вашем пространстве.", fermer: "Закрыть", vrT: "AssistAcad заблокирован", vrP: "Разблокируйте через Face ID или отпечаток.", vrGo: "Разблокировать", indispo: "Биометрия недоступна на этом устройстве.", echec: "Проверка не удалась. Повторите.", confirmWipe: "Нажмите ещё раз для подтверждения", majDispo: "Доступна новая версия — обновите." },
+    ar: { reg: "الإعدادات", bioT: "القفل ببصمة الوجه / الإصبع", bioS: "طلب القياسات الحيوية عند الفتح.", wipe: "تسجيل الخروج ومسح بياناتي", note: "لإزالة التطبيق نهائيًا: اضغط مطولًا على أيقونة AssistAcad ← «إزالة». لتسجيل الخروج من حسابك استخدم «تسجيل الخروج» داخل مساحتك.", fermer: "إغلاق", vrT: "AssistAcad مقفل", vrP: "افتح القفل ببصمة الوجه أو إصبعك.", vrGo: "فتح القفل", indispo: "القياسات الحيوية غير متاحة على هذا الجهاز.", echec: "فشل التحقق. حاول مجددًا.", confirmWipe: "اضغط مرة أخرى للتأكيد", majDispo: "تتوفر نسخة جديدة — يرجى التحديث." }
+  };
+  var rgv = RGV[LG] || RGV.fr;
+  function b64u(buf) { var b = new Uint8Array(buf), s = ""; for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]); return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+  function ub64(str) { str = String(str).replace(/-/g, "+").replace(/_/g, "/"); var pad = "=".repeat((4 - str.length % 4) % 4), raw = atob(str + pad), u = new Uint8Array(raw.length); for (var i = 0; i < raw.length; i++) u[i] = raw.charCodeAt(i); return u; }
+  function alea(n) { var u = new Uint8Array(n); (window.crypto || window.msCrypto).getRandomValues(u); return u; }
+  function bioDispo() { try { return !!(window.PublicKeyCredential && navigator.credentials && navigator.credentials.create); } catch (e) { return false; } }
+  function bioActif() { try { return localStorage.getItem("aa_bio") === "1" && !!localStorage.getItem("aa_bio_id"); } catch (e) { return false; } }
+  function bioRegistrer(cb) {
+    if (!bioDispo()) { cb(false); return; }
+    navigator.credentials.create({ publicKey: { challenge: alea(32), rp: { name: "AssistAcad" }, user: { id: alea(16), name: "assistacad", displayName: "AssistAcad" }, pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }], authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required", residentKey: "preferred" }, timeout: 60000, attestation: "none" } })
+      .then(function (cred) { try { localStorage.setItem("aa_bio_id", b64u(cred.rawId)); localStorage.setItem("aa_bio", "1"); } catch (e) {} cb(true); })
+      .catch(function () { cb(false); });
+  }
+  function bioVerifier(cb) {
+    if (!bioActif()) { cb(true); return; }
+    var id; try { id = ub64(localStorage.getItem("aa_bio_id")); } catch (e) { cb(false); return; }
+    navigator.credentials.get({ publicKey: { challenge: alea(32), allowCredentials: [{ type: "public-key", id: id }], userVerification: "required", timeout: 60000 } })
+      .then(function () { cb(true); }).catch(function () { cb(false); });
+  }
+  function bioDesactiver() { try { localStorage.removeItem("aa_bio"); localStorage.removeItem("aa_bio_id"); } catch (e) {} }
+  function verrouiller(onok) {
+    var v = document.getElementById("verrou");
+    document.getElementById("vrT").textContent = rgv.vrT; document.getElementById("vrP").textContent = rgv.vrP;
+    var go = document.getElementById("vrGo"); go.textContent = rgv.vrGo;
+    if (LG === "ar") v.setAttribute("dir", "rtl");
+    finSplash(); v.classList.add("vu");
+    function tenter() { go.disabled = true; bioVerifier(function (ok) { go.disabled = false; if (ok) { v.classList.remove("vu"); onok(); } else { document.getElementById("vrP").textContent = rgv.echec; } }); }
+    go.onclick = tenter;
+    setTimeout(tenter, 500);
+  }
+  function effacerDonnees() {
+    try { if ("serviceWorker" in navigator && navigator.serviceWorker.getRegistrations) navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); }); } catch (e) {}
+    try { if (window.caches && caches.keys) caches.keys().then(function (k) { k.forEach(function (x) { caches.delete(x); }); }); } catch (e) {}
+    try { localStorage.clear(); } catch (e) {}
+    try { sessionStorage.clear(); } catch (e) {}
+    setTimeout(function () { location.reload(); }, 900);
+  }
+  (function reglagesInit() {
+    var regBtn = document.getElementById("regBtn"), sheet = document.getElementById("reglages");
+    if (LG === "ar") sheet.setAttribute("dir", "rtl");
+    document.getElementById("rgT").textContent = rgv.reg;
+    document.getElementById("rgBioT").textContent = rgv.bioT;
+    document.getElementById("rgBioS").textContent = bioDispo() ? rgv.bioS : rgv.indispo;
+    document.getElementById("rgWipe").textContent = rgv.wipe;
+    document.getElementById("rgNote").textContent = rgv.note;
+    document.getElementById("rgFermer").textContent = rgv.fermer;
+    var sw = document.getElementById("rgBio");
+    function majSw() { sw.classList.toggle("on", bioActif()); if (!bioDispo()) sw.classList.add("off-dis"); }
+    majSw();
+    sw.onclick = function () {
+      if (!bioDispo()) { toastP(rgv.indispo); return; }
+      if (bioActif()) { bioDesactiver(); majSw(); return; }
+      bioRegistrer(function (ok) { if (!ok) toastP(rgv.echec); majSw(); });
+    };
+    var wipe = document.getElementById("rgWipe");
+    wipe.onclick = function () {
+      if (wipe.getAttribute("data-sure") !== "1") { wipe.setAttribute("data-sure", "1"); var t0 = wipe.textContent; wipe.textContent = rgv.confirmWipe; setTimeout(function () { wipe.removeAttribute("data-sure"); wipe.textContent = rgv.wipe; }, 3000); return; }
+      effacerDonnees();
+    };
+    function ouvrir() { majSw(); sheet.classList.add("vu"); }
+    function fermer() { sheet.classList.remove("vu"); }
+    regBtn.onclick = ouvrir;
+    document.getElementById("rgFermer").onclick = fermer;
+    sheet.addEventListener("click", function (e) { if (e.target === sheet) fermer(); });
+    if (enAppli) regBtn.classList.add("vu");
+  })();
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
 })();
