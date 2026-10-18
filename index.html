@@ -132,6 +132,13 @@
   #verrou h2{margin:0 0 6px;font-size:22px;color:#fff}
   #verrou p{margin:0 0 18px;color:#B5D9C1;font-size:14px;line-height:1.4}
   #verrou button{border:0;border-radius:14px;background:var(--vif);color:var(--encre);font:800 16px Manrope,system-ui,sans-serif;padding:14px 26px;min-height:50px;cursor:pointer}
+  #bioPrompt{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:7;display:none;align-items:center;gap:12px;background:var(--forest);color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 18px 40px rgba(0,0,0,.35);font-size:14px;line-height:1.4}
+  #bioPrompt.vu{display:flex;animation:entre .5s ease both}
+  #bioPrompt svg{width:30px;height:30px;flex:none}
+  #bioPrompt .t{flex:1;min-width:0}
+  #bioPrompt button{border:0;border-radius:12px;font-weight:800;font-size:14px;font-family:inherit;padding:10px 13px;cursor:pointer;min-height:42px}
+  #bioPrompt .ok{background:var(--vif);color:var(--encre)}
+  #bioPrompt .no{background:transparent;color:#B5D9C1}
   @media (prefers-reduced-motion: reduce){#splash *,#bandeau.vu{animation:none!important}}
 </style>
 </head>
@@ -169,6 +176,7 @@
   <div class="note" id="rgNote"></div>
   <button type="button" class="fermer" id="rgFermer">Fermer</button>
 </div></div>
+<div id="bioPrompt" role="region"><svg viewBox="0 0 24 24" fill="none" stroke="#12B347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div class="t" id="bioPromptT"></div><button class="ok" id="bioPromptGo"></button><button class="no" id="bioPromptNo" aria-label="Plus tard">✕</button></div>
 <div id="verrou" role="dialog" aria-modal="true" aria-labelledby="vrT"><div class="box">
   <svg viewBox="0 0 24 24" fill="none" stroke="#12B347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
   <h2 id="vrT">AssistAcad verrouillé</h2><p id="vrP">Déverrouille avec Face ID ou ton empreinte.</p>
@@ -548,6 +556,32 @@
     document.getElementById("rgFermer").onclick = fermer;
     sheet.addEventListener("click", function (e) { if (e.target === sheet) fermer(); });
     if (enAppli) regBtn.classList.add("vu");
+  })();
+
+  // ====== Proposer Face ID / empreinte À LA CONNEXION (signal « aa-connecte » envoyé par l'espace) ======
+  (function bioLogin() {
+    var BIOTX = {
+      fr: { bp: "Active Face ID / empreinte pour entrer directement la prochaine fois.", go: "Activer", on: "Face ID / empreinte activé ✓" },
+      en: { bp: "Turn on Face ID / fingerprint to get in directly next time.", go: "Turn on", on: "Biometrics on ✓" },
+      ru: { bp: "Включите Face ID / отпечаток, чтобы входить сразу в следующий раз.", go: "Включить", on: "Биометрия включена ✓" },
+      ar: { bp: "فعّل بصمة الوجه / الإصبع للدخول مباشرة في المرة القادمة.", go: "تفعيل", on: "تم التفعيل ✓" }
+    };
+    var bt = BIOTX[LG] || BIOTX.fr, boite = document.getElementById("bioPrompt");
+    if (LG === "ar") boite.setAttribute("dir", "rtl");
+    document.getElementById("bioPromptT").textContent = bt.bp;
+    document.getElementById("bioPromptGo").textContent = bt.go;
+    function recemmentRefuse() { try { var d = Number(localStorage.getItem("aa_bio_prop") || 0); return d && (Date.now() - d) < 604800000; } catch (e) { return false; } }
+    function peut() { return bioDispo() && !bioActif() && !recemmentRefuse(); }
+    function note() { try { localStorage.setItem("aa_bio_prop", String(Date.now())); } catch (e) {} }
+    document.getElementById("bioPromptNo").onclick = function () { boite.classList.remove("vu"); note(); };
+    document.getElementById("bioPromptGo").onclick = function () {
+      boite.classList.remove("vu");
+      bioRegistrer(function (ok) { note(); toastP(ok ? bt.on : (rgv.echec || "Échec")); });
+    };
+    window.addEventListener("message", function (e) {
+      var d = e && e.data; if (!d || d.aa !== "aa-connecte") return;
+      if (peut()) setTimeout(function () { if (peut()) boite.classList.add("vu"); }, 1600);
+    });
   })();
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
