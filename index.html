@@ -578,10 +578,14 @@
       boite.classList.remove("vu");
       bioRegistrer(function (ok) { note(); toastP(ok ? bt.on : (rgv.echec || "Échec")); });
     };
+    function proposer(delai) { setTimeout(function () { if (peut() && !boite.classList.contains("vu")) boite.classList.add("vu"); }, delai || 1600); }
+    // 1) Dès que l'espace signale une connexion (si le message cross-origin passe).
     window.addEventListener("message", function (e) {
       var d = e && e.data; if (!d || d.aa !== "aa-connecte") return;
-      if (peut()) setTimeout(function () { if (peut()) boite.classList.add("vu"); }, 1600);
+      proposer(1600);
     });
+    // 2) Repli fiable : en mode installé, on propose même si le signal n'arrive jamais.
+    if (enAppli) { proposer(6000); setTimeout(function () { proposer(0); }, 20000); }
   })();
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
